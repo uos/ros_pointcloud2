@@ -614,7 +614,7 @@ impl PointCloud2MsgBuilder {
             return Err(ConversionError::InvalidFieldFormat);
         }
 
-        if !(self.data.len() as u32).is_multiple_of(self.point_step) {
+        if (self.data.len() as u32) % self.point_step != 0 {
             return Err(ConversionError::DataLengthMismatch);
         }
 
@@ -1165,12 +1165,12 @@ impl PointCloud2Msg {
             return Err(ConversionError::UnsupportedSliceView);
         }
 
-        if !self.data.len().is_multiple_of(c_size) {
+        if self.data.len() % c_size != 0 {
             return Err(ConversionError::DataLengthMismatch);
         }
 
         let ptr = self.data.as_ptr() as *const C;
-        if !(ptr as usize).is_multiple_of(core::mem::align_of::<C>()) {
+        if (ptr as usize) % core::mem::align_of::<C>() != 0 {
             return Err(ConversionError::UnalignedBuffer);
         }
 
