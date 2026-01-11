@@ -9,7 +9,7 @@ This library provides ergonomic and safe abstractions for the `PointCloud2` type
 
 To remain framework-agnostic, the crate uses its own `PointCloud2Msg` type, ensuring compatibility across different ROS ecosystems.
 
-Get started with the example below or visit the [documentation](https://docs.rs/ros_pointcloud2/1.0.0-rc.1/ros_pointcloud2/) for a complete guide.
+Get started with the example below or visit the [documentation](https://docs.rs/ros_pointcloud2/1.0.0-rc.2/ros_pointcloud2/) for a complete guide.
 
 ## Quickstart
 
@@ -18,7 +18,7 @@ Get started with the example below or visit the [documentation](https://docs.rs/
 
 ```toml
 [dependencies]
-ros_pointcloud2 = "1.0.0-rc.1" # or use the old version 0.6
+ros_pointcloud2 = "1.0.0-rc.2" # or use the old version 0.6
 ```
 
 ```rust
