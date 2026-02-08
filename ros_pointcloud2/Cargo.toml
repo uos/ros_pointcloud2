@@ -37,7 +37,7 @@ rkyv = { version = "0.8", optional = true }
 
 [dev-dependencies]
 rand = "0.9"
-criterion = { version = "0.5", features = ["html_reports"] }
+criterion = { version = "0.8", features = ["html_reports"] }
 pretty_assertions = "1.0"
 
 [[bench]]
