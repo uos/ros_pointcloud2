@@ -1,0 +1,103 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  tests:
+    runs-on: ubuntu-dev-noble-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Linting
+        run: |
+          rustup update
+          rustup component add clippy
+          cargo clippy -p ros_pointcloud2 -p rpcl2-derive -p derive-test --all-targets --all-features -- -D warnings
+      - name: Build examples with features
+        run: cargo build --examples --features derive,rayon,serde,rkyv
+      - name: Verify MSRV
+        run: cd ros_pointcloud2 && cargo msrv verify
+      - name: Test library
+        run: cargo test --features derive,nalgebra,rayon,serde
+      - name: Crate specific all features tests
+        run: cargo test --package ros_pointcloud2 --all-features
+
+  no_std:
+    needs:
+      - tests
+    runs-on: ubuntu-dev-noble-arm
+    steps:
+      - uses: actions/checkout@v4
+      - name: no_std build
+        run: |
+          rustup update
+          rustup target add thumbv7em-none-eabihf
+          cargo build --target thumbv7em-none-eabihf --manifest-path ros_pointcloud2/ensure_no_std/Cargo.toml
+
+  r2r_galactic:
+    needs:
+      - tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash -lc "./integration/scripts/run-ros-tests-docker.sh r2r integration/docker/Dockerfile_r2r_galactic copy"
+
+  r2r_humble:
+    needs:
+      - tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash -lc "./integration/scripts/run-ros-tests-docker.sh r2r integration/docker/Dockerfile_r2r_humble copy"
+
+  r2r_iron:
+    needs:
+      - tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash -lc "./integration/scripts/run-ros-tests-docker.sh r2r integration/docker/Dockerfile_r2r_iron copy"
+
+  r2r_jazzy:
+    needs:
+      - tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash -lc "./integration/scripts/run-ros-tests-docker.sh r2r integration/docker/Dockerfile_r2r_jazzy copy"
+
+  rclrs_humble:
+    needs:
+      - tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash -lc "./integration/scripts/run-ros-tests-docker.sh rclrs integration/docker/Dockerfile_rclrs_humble copy"
+
+  rclrs_rolling:
+    needs:
+      - tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash -lc "./integration/scripts/run-ros-tests-docker.sh rclrs integration/docker/Dockerfile_rclrs_rolling copy"
+
+  roslibrust:
+    needs:
+      - tests
+    runs-on: ubuntu-dev-noble-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: ROS1
+        run: cargo run --features roslibrust --bin roslibrust_ros1_tests
+      - name: ROS2
+        run: cargo run --features roslibrust --bin roslibrust_ros2_tests

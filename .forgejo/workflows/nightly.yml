@@ -1,0 +1,31 @@
+name: Nightly testing
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule: [cron: "40 1 * * *"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+permissions:
+  contents: read
+
+jobs:
+  nightly:
+    runs-on: ubuntu-dev-noble-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Linting
+        run: |
+          rustup default nightly
+          rustup update
+          rustup component add clippy
+          cargo clippy -p ros_pointcloud2 -p rpcl2-derive -p derive-test --all-targets --all-features -- -D warnings
+      - name: Workspace Tests
+        run: cargo test --features derive,rayon,serde
+      - name: Crate specific all features tests
+        run: cargo test --package ros_pointcloud2 --all-features

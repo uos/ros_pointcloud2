@@ -9,3 +9,9 @@ members = [
 ]
 
 resolver = "2"
+
+[workspace.package]
+license = "MIT OR Apache-2.0"
+repository = "https://codeberg.org/stelzo/ros_pointcloud2/"
+authors = ["Christopher Sieh <stelzo@steado.de>"]
+homepage = "https://lib.rs/crates/ros_pointcloud2"

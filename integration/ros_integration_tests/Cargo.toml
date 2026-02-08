@@ -4,13 +4,13 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Christopher Sieh <stelzo@steado.de>"]
 description = "Integration tests for ros_pointcloud2 that require ROS client crates (optional features)."
-repository = "https://github.com/stelzo/ros_pointcloud2"
+repository = "https://codeberg.org/stelzo/ros_pointcloud2"
 license = "MIT OR Apache-2.0"
 keywords = ["ros", "pointcloud2", "integration", "tests"]
 categories = ["development-tools::testing"]
 
 [dependencies]
-ros_pointcloud2 = { path = "../../ros_pointcloud2" }
+ros_pointcloud2 = { path = "../../ros_pointcloud2", features = ["roslibrust_ros1", "roslibrust_ros2", "r2r", "rclrs", "rosrust", "nalgebra", "ros2_interfaces_jazzy_rkyv", "ros2_interfaces_jazzy_serde"] }
 ros2-interfaces-jazzy-serde = { version = "0.0.4", features = [
   "sensor_msgs",
 ], optional = true }
@@ -18,7 +18,7 @@ ros2-interfaces-jazzy-rkyv = { version = "0.0.5", features = [
   "sensor_msgs",
 ], optional = true }
 r2r = { version = "0.9", optional = true }
-rclrs = { version = "0.6", optional = true }
+rclrs = { version = "0.7", optional = true }
 rosrust = { version = "0.9.12", optional = true }
 rosrust_msg = { version = "0.1.8", optional = true }
 nalgebra = { version = "0.34", optional = true }

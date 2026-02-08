@@ -5,7 +5,7 @@
 //!   1. Write your conversion macro in this file to generate conversion functions between `PointCloud2Msg` and the target ROS crate.
 //!       - A typical name is `impl_pointcloud2_for_<crate>!()`.
 //!   2. Test your implementation in `integration/ros_integration_tests/`. See existing tests for examples and use Docker if needed to set up ROS environments.
-//!   3. Create a Workflow in `.github/workflows/` to run the tests with the appropriate features enabled.
+//!   3. Create a Workflow in `.forgejo/workflows/` to run the tests with the appropriate features enabled.
 //!   4. Create a PR to add the new feature to `Cargo.toml` and document it in `lib.rs`.
 //!
 use alloc::string::{String, ToString};
@@ -182,6 +182,7 @@ pub mod cowstr_with {
     }
 }
 
+#[cfg(feature = "r2r")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_r2r {
     () => {
@@ -277,6 +278,7 @@ macro_rules! impl_pointcloud2_for_r2r {
     };
 }
 
+#[cfg(feature = "ros2_interfaces_jazzy_serde")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_ros2_interfaces_jazzy_serde {
     () => {
@@ -374,6 +376,7 @@ macro_rules! impl_pointcloud2_for_ros2_interfaces_jazzy_serde {
     };
 }
 
+#[cfg(feature = "ros2_interfaces_jazzy_rkyv")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_ros2_interfaces_jazzy_rkyv {
     () => {
@@ -471,6 +474,7 @@ macro_rules! impl_pointcloud2_for_ros2_interfaces_jazzy_rkyv {
     };
 }
 
+#[cfg(feature = "rosrust")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_rosrust {
     () => {
@@ -573,6 +577,7 @@ macro_rules! impl_pointcloud2_for_rosrust {
     };
 }
 
+#[cfg(feature = "rclrs")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_rclrs {
     () => {
@@ -668,6 +673,7 @@ macro_rules! impl_pointcloud2_for_rclrs {
     };
 }
 
+#[cfg(feature = "roslibrust_ros1")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_roslibrust_ros1 {
     ($root:path) => {
@@ -750,6 +756,7 @@ macro_rules! impl_pointcloud2_for_roslibrust_ros1 {
     };
 }
 
+#[cfg(feature = "roslibrust_ros2")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_roslibrust_ros2 {
     ($root:path) => {

@@ -20,7 +20,7 @@ v1.0.0
 - Fixed copying structured pointclouds from ``Vec`` with same endianness.
 - New feature ``rkyv`` for (de)serialization of ``PointCloud2Msg`` using ``rkyv``. This allows zero-copy deserialization in ROS-like systems that use ``rkyv`` for message (de)serialization.
 - Many internal optimizations for runtime speed and code maintainability; the main benefit is the removed need for allocations in the hot path of conversions.
-- Bump MSRV to 1.87.
+- Bump MSRV to 1.85.
 - Adds various tests for edge cases.
 
 v0.6.0

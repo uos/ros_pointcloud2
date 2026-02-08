@@ -1,11 +1,12 @@
 [package]
 name = "ros_pointcloud2"
-version = "1.0.0-rc.2"
+version = "1.0.0-rc.3"
 edition = "2024"
-authors = ["Christopher Sieh <stelzo@steado.de>"]
 description = "Customizable conversions for working with sensor_msgs/PointCloud2."
-repository = "https://github.com/stelzo/ros_pointcloud2"
-license = "MIT OR Apache-2.0"
+authors.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
 keywords = ["ros", "pointcloud2", "pointcloud", "message"]
 categories = [
   "science::robotics",
@@ -15,9 +16,9 @@ categories = [
 ]
 readme = "../README.md"
 documentation = "https://docs.rs/ros_pointcloud2"
-homepage = "https://github.com/stelzo/ros_pointcloud2"
 exclude = [
-  "**/.github/**",
+  "**/.gitlab-ci.yml/**",
+  "**/.forgejo/**",
   "**/integration/**",
   "**/docker/**",
   "**/target/**",
@@ -30,9 +31,9 @@ exclude = [
 rust-version = "1.85"
 
 [dependencies]
-rayon = { version = "1", optional = true }
+rayon = { version = "1.11", optional = true }
 rpcl2-derive = { version = "1.0.0-rc.1", optional = true, path = "../rpcl2-derive" }
-serde = { version = "1", features = ["derive"], optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }
 rkyv = { version = "0.8", optional = true }
 
 [dev-dependencies]
@@ -52,6 +53,14 @@ rkyv = ["dep:rkyv", "std"]
 serde = ["dep:serde"]
 std = []
 strict-type-check = []
+roslibrust_ros1 = []
+roslibrust_ros2 = []
+rosrust = []
+r2r = []
+rclrs = []
+ros2_interfaces_jazzy_rkyv = []
+ros2_interfaces_jazzy_serde = []
+nalgebra = []
 
 default = ["std", "strict-type-check"]
 

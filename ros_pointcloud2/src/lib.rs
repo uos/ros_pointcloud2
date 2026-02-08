@@ -19,7 +19,7 @@
 //! - [`try_from_iter`](PointCloud2Msg::try_from_iter) allocates a new message from an iterator
 //! - [`try_into_iter`](PointCloud2Msg::try_into_iter) iterator over points in the message
 //!
-//! They feature predictable performance but they do not scale well with large clouds. Learn more about that in the [performance section](https://github.com/stelzo/ros_pointcloud2?tab=readme-ov-file#performance) of the repository.
+//! They feature predictable performance but they do not scale well with large clouds. Learn more about that in the [performance section](https://codeberg.org/stelzo/ros_pointcloud2?tab=readme-ov-file#performance) of the repository.
 //! The iterators are useful when your conversions are more complex than a simple copy or the cloud is small enough.
 //!
 //! When the cloud is getting larger or you are doing a lot of processing per point, turn on the `rayon` feature and switch to the parallel iterators.
@@ -32,7 +32,7 @@
 //!
 //! Support for client crates is provided via consumer-side macros that generate conversions between `PointCloud2Msg` and the client crate's message types.
 //!
-//! Simply add the client crate to your `Cargo.toml` and invoke the corresponding macro in your crate scope.
+//! Simply add the client crate to your `Cargo.toml` with the corresponding features enabled and invoke the corresponding macro in your crate scope.
 //!
 //! ## Quick examples
 //!
@@ -40,7 +40,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! ros_pointcloud2 = "*"
+//! ros_pointcloud2 = { version = "1.0.0-rc.3", features = ["r2r", "rosrust", "nalgebra"] }
 //!
 //! r2r = "*"
 //! # ... or maybe for ROS1:
@@ -50,14 +50,14 @@
 //! ```
 //!
 //! Then invoke the macro in your crate root or tests to generate conversions:
-//! | Library | Macro | ROS Version |
-//! | :--- | :--- | :--- |
-//! | [rclrs](https://docs.rs/rclrs/latest/rclrs/) | [`impl_pointcloud2_for_rclrs!`] | ROS 2 |
-//! | [r2r](https://docs.rs/r2r/latest/r2r/) | [`impl_pointcloud2_for_r2r!`] | ROS 2 |
-//! | [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) | [`impl_pointcloud2_for_ros2_interfaces_jazzy_serde!`] | ROS 2 |
-//! | [rosrust](https://docs.rs/rosrust/latest/rosrust/) | [`impl_pointcloud2_for_rosrust!`] | ROS 1 |
-//! | [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) | [`impl_pointcloud2_for_roslibrust_ros1!`] | ROS 1 |
-//! | [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) | [`impl_pointcloud2_for_roslibrust_ros2!`] | ROS 2 |
+//! | Library | Macro | ROS Version | Feature |
+//! | :--- | :--- | :--- | :--- |
+//! | [rclrs](https://docs.rs/rclrs/latest/rclrs/) | [`impl_pointcloud2_for_rclrs!`] | ROS 2 | `"rclrs"` |
+//! | [r2r](https://docs.rs/r2r/latest/r2r/) | [`impl_pointcloud2_for_r2r!`] | ROS 2 | `"r2r"` |
+//! | [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) | [`impl_pointcloud2_for_ros2_interfaces_jazzy_serde!`] | ROS 2 | `"ros2_interfaces_jazzy_serde"` |
+//! | [rosrust](https://docs.rs/rosrust/latest/rosrust/) | [`impl_pointcloud2_for_rosrust!`] | ROS 1 | `"rosrust"` |
+//! | [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) | [`impl_pointcloud2_for_roslibrust_ros1!`] | ROS 1 | `"roslibrust_ros1"` |
+//! | [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) | [`impl_pointcloud2_for_roslibrust_ros2!`] | ROS 2 | `"roslibrust_ros2"` |
 //!
 //! The roslibrust macros need to be invoked with the crate root where the messages are included via `include!`.
 //!
@@ -72,6 +72,7 @@
 //! ```
 //!
 //! There is also [nalgebra](https://docs.rs/nalgebra/latest/nalgebra/) support to convert common point types to nalgebra `Point3` type [`impl_pointxyz_for_nalgebra!`].
+//! Enable the `"nalgebra"` feature and invoke the macro.
 //!
 //! ```ignore
 //! ros_pointcloud2::impl_pointxyz_for_nalgebra!();
@@ -119,12 +120,21 @@
 //! ```
 //!
 //! # Features
-//! - std *(enabled by default)* — Omit this feature to use this library in no_std environments. ROS integrations and `rayon` will not work with no_std.
+//! - std *(enabled by default)* — Omit this feature to use this library in no_std environments. Many ROS integrations and `rayon` will not work with no_std.
 //! - strict-type-check *(enabled by default)* — When disabled, allows byte conversions between size-compatible types like i32 and f32. Packed RGB fields are specially handled and allowed.
 //! - derive — Offers implementations for the [`PointConvertible`] trait needed for custom points.
 //! - serde — Enables serde serialization and deserialization for [`PointCloud2Msg`] and related types.
 //! - rkyv — Enables rkyv serialization and deserialization for [`PointCloud2Msg`] and related types.
 //! - rayon — Parallel iterator support for `*_par_iter` functions.
+//! - r2r — Include macros for the [r2r](https://docs.rs/r2r/latest/r2r/) ROS 2 client crate.
+//! - rclrs — Include macros for the [rclrs](https://docs.rs/rclrs/latest/rclrs/) ROS 2 client crate.
+//! - roslibrust_ros1 — Include macros for the [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) client crate with ROS 1 messages.
+//! - roslibrust_ros2 — Include macros for the [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) client crate with ROS 2 messages.
+//! - rosrust — Include macros for the [rosrust](https://docs.rs/rosrust/latest/rosrust/) ROS 1 client crate.
+//! - ros2_interfaces_jazzy_rkyv — Include macros for the [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) crate with rkyv serialization.
+//! - ros2_interfaces_jazzy_serde — Include macros for the [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) crate with serde serialization.
+//! - nalgebra — Include macros for the [nalgebra](https://docs.rs/nalgebra/latest/nalgebra/) crate, with conversions from common point types to nalgebra `Point3` type.
+//!
 //!
 //! # Custom Points
 //! Implement [`PointConvertible`] for your point with the `derive` feature or manually.
@@ -269,7 +279,10 @@ impl core::fmt::Display for ConversionError {
                 )
             }
             ConversionError::DataLengthMismatch => {
-                write!(f, "The length of the byte buffer in the message does not match the expected length computed from the fields, indicating a corrupted or malformed message.")
+                write!(
+                    f,
+                    "The length of the byte buffer in the message does not match the expected length computed from the fields, indicating a corrupted or malformed message."
+                )
             }
             ConversionError::FieldsNotFound(fields) => {
                 write!(f, "Some fields are not found in the message: {fields:?}")
@@ -281,7 +294,10 @@ impl core::fmt::Display for ConversionError {
                 )
             }
             ConversionError::NumberConversion => {
-                write!(f, "The number is too large to be converted into a PointCloud2 supported datatype.")
+                write!(
+                    f,
+                    "The number is too large to be converted into a PointCloud2 supported datatype."
+                )
             }
             ConversionError::TypeMismatch { stored, requested } => {
                 write!(
@@ -297,16 +313,25 @@ impl core::fmt::Display for ConversionError {
                 )
             }
             ConversionError::UnalignedBuffer => {
-                write!(f, "The underlying byte buffer is not properly aligned for the requested slice type.")
+                write!(
+                    f,
+                    "The underlying byte buffer is not properly aligned for the requested slice type."
+                )
             }
             ConversionError::VecElementSizeMismatch {
                 element_size,
                 expected_point_step,
             } => {
-                write!(f, "The input Vec element size ({element_size}) does not match the expected point_step ({expected_point_step}); ownership cannot be transferred without copying.")
+                write!(
+                    f,
+                    "The input Vec element size ({element_size}) does not match the expected point_step ({expected_point_step}); ownership cannot be transferred without copying."
+                )
             }
             ConversionError::UnsupportedSliceView => {
-                write!(f, "The message layout cannot be viewed as a contiguous slice of the requested point type (stride or layout mismatch).")
+                write!(
+                    f,
+                    "The message layout cannot be viewed as a contiguous slice of the requested point type (stride or layout mismatch)."
+                )
             }
         }
     }
@@ -728,8 +753,8 @@ impl PointCloud2Msg {
     }
 
     #[inline]
-    fn message_template_for_type<const N: usize, C>(
-    ) -> Result<(PointCloud2MsgBuilder, usize), ConversionError>
+    fn message_template_for_type<const N: usize, C>()
+    -> Result<(PointCloud2MsgBuilder, usize), ConversionError>
     where
         C: PointConvertible<N>,
     {

@@ -258,6 +258,7 @@ impl PointXYZ {
 /// let p = ros_pointcloud2::PointXYZ::new(1.0,2.0,3.0);
 /// let np = p.xyz();
 /// ```
+#[cfg(feature = "nalgebra")]
 #[macro_export]
 macro_rules! impl_pointxyz_for_nalgebra {
     () => {

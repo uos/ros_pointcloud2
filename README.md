@@ -1,7 +1,7 @@
 <p align="center">
   <h3 align="center">ROS PointCloud2</h3>
   <p align="center">A PointCloud2 message conversion library.</p>
-  <p align="center"><a href="https://crates.io/crates/ros_pointcloud2"><img src="https://img.shields.io/crates/v/ros_pointcloud2.svg" alt=""></a> <a href="https://github.com/stelzo/ros_pointcloud2/tree/main/tests"><img src="https://github.com/stelzo/ros_pointcloud2/actions/workflows/tests.yml/badge.svg" alt=""></a>
+  <p align="center"><a href="https://crates.io/crates/ros_pointcloud2"><img src="https://img.shields.io/crates/v/ros_pointcloud2.svg" alt=""></a>
   </p>
 </p>
 
@@ -9,16 +9,18 @@ This library provides ergonomic and safe abstractions for the `PointCloud2` type
 
 To remain framework-agnostic, the crate uses its own `PointCloud2Msg` type, ensuring compatibility across different ROS ecosystems.
 
-Get started with the example below or visit the [documentation](https://docs.rs/ros_pointcloud2/1.0.0-rc.2/ros_pointcloud2/) for a complete guide.
+Get started with the example below or visit the [documentation](https://docs.rs/ros_pointcloud2/1.0.0-rc.3/ros_pointcloud2/) for a complete guide.
 
 ## Quickstart
 
 > [!NOTE]  
 > We are transitioning to a new version (v1.0.0). Please open an issue if you encounter problems. The stable version remains v0.6.0. For the latest stable release, refer to the [v0.6.0 documentation](https://docs.rs/ros_pointcloud2/0.6.0/ros_pointcloud2/). Check the [changelog](./CHANGELOG.rst) for a full list of changes
 
+Start by adding the crate to your `Cargo.toml` with the features for your ROS library of choice. See the table below for a list of supported crates.
+
 ```toml
 [dependencies]
-ros_pointcloud2 = "1.0.0-rc.2" # or use the old version 0.6
+ros_pointcloud2 = { version = "1.0.0-rc.3", features = ["rclrs"] } # or use the old version 0.6
 ```
 
 ```rust
@@ -33,14 +35,14 @@ let cloud_points = vec![
 let out_msg = PointCloud2Msg::try_from_slice(&cloud_points).unwrap();
 
 // Outside of your main
-// impl_pointcloud2_for_r2r!();
+// impl_pointcloud2_for_rclrs!();
 
 // Convert to your ROS crate message type.
-// let msg = impl_r2r::from_pointcloud2_msg(out_msg);
+// let msg = impl_rclrs::from_pointcloud2_msg(out_msg);
 // Publish ...
 
 // ... now incoming from a topic.
-// let in_msg = impl_r2r::to_pointcloud2_msg(msg);
+// let in_msg = impl_rclrs::to_pointcloud2_msg(msg);
 let in_msg = out_msg;
 
 let processed_cloud = in_msg.try_into_iter().unwrap()
@@ -55,14 +57,13 @@ let processed_cloud = in_msg.try_into_iter().unwrap()
 
 There is currently support for the following ROS libraries.
 
-| Library | Macro | ROS Version |
-| :--- | :--- | :--- |
-| [rclrs](https://docs.rs/rclrs/latest/rclrs/) | `impl_pointcloud2_for_rclrs!()` | ROS 2 |
-| [r2r](https://docs.rs/r2r/latest/r2r/) | `impl_pointcloud2_for_r2r!()` | ROS 2 |
-| [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) | `impl_pointcloud2_for_ros2_interfaces_jazzy_serde!()` | ROS 2 |
-| [rosrust](https://docs.rs/rosrust/latest/rosrust/) | `impl_pointcloud2_for_rosrust!()` | ROS 1 |
-| [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) | `impl_pointcloud2_for_roslibrust_ros1!(crate)` | ROS 1 |
-| [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) | `impl_pointcloud2_for_roslibrust_ros2!(crate)` | ROS 2 |
+- [rclrs](https://docs.rs/rclrs/latest/rclrs/) Feature: `"rclrs"`
+- [r2r](https://docs.rs/r2r/latest/r2r/) Feature: `"r2r"`
+- [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) Feature: `"ros2_interfaces_jazzy_serde"`
+- [rosrust](https://docs.rs/rosrust/latest/rosrust/) Feature: `"rosrust"`
+- [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) Features: `"roslibrust_ros1"` and `"roslibrust_ros2"`
+
+See the documentation for the respective macros for details on how to use them.
 
 Note that the macros for `roslibrust` need the root path where messages are included via `include!` as a parameter.
 
@@ -80,7 +81,7 @@ Also, add the following dependencies to your `package.xml` (if your library of c
 
 Please open an issue or PR if you need support for other ROS libraries.
 
-There is also nalgebra support to convert common point types to the nalgebra `Point3` type.
+There is also nalgebra support to convert common point types to the nalgebra `Point3` type. Enable the `"nalgebra"` feature and invoke the macro.
 
 ```rust
 ros_pointcloud2::impl_pointxyz_for_nalgebra!();
