@@ -45,7 +45,7 @@ optional = true
 
 [dependencies.roslibrust_util]
 git = "https://github.com/lucasw/tf_roslibrust"
-version = "0.16.0"
+version = "0.16.2"
 optional = true
 
 [dev-dependencies]
