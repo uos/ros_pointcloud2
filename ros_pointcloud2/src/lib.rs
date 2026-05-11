@@ -830,7 +830,7 @@ impl PointCloud2Msg {
             for ((pdata_entry, field_name), field_val) in point
                 .fields
                 .into_iter()
-                .zip(field_names.into_iter())
+                .zip(field_names)
                 .zip(fields.iter_mut())
             {
                 let datatype_code = pdata_entry.datatype.into();
