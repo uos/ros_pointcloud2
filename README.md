@@ -58,6 +58,7 @@ let processed_cloud = in_msg.try_into_iter().unwrap()
 There is currently support for the following ROS libraries.
 
 - [rclrs](https://docs.rs/rclrs/latest/rclrs/) Feature: `"rclrs"`
+- [Hiroz](https://zettascalelabs.github.io/hiroz/) Feature: `"hiroz"` Macro: `impl_pointcloud2_for_hiroz!`
 - [r2r](https://docs.rs/r2r/latest/r2r/) Feature: `"r2r"`
 - [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) Feature: `"ros2_interfaces_jazzy_serde"`
 - [rosrust](https://docs.rs/rosrust/latest/rosrust/) Feature: `"rosrust"`
@@ -66,6 +67,8 @@ There is currently support for the following ROS libraries.
 See the documentation for the respective macros for details on how to use them.
 
 Note that the macros for `roslibrust` need the root path where messages are included via `include!` as a parameter.
+
+The Hiroz macro expects consumers to enable the `ros_pointcloud2` feature `"hiroz"` and add `hiroz-msgs` themselves, currently from the Hiroz git repository unless Hiroz publishes the crate. Because Hiroz stores byte arrays as `ZBuf`, consumers also need `zenoh-buffers` for incoming `PointCloud2` data conversion.
 
 The macros are tested on various distros with CI. Since the message definition itself is static for a long time now, this crate should work on all ROS distros for as long as the respective ROS library or framework does not change its message generation pipeline.
 

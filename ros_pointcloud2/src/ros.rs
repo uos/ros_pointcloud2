@@ -278,6 +278,104 @@ macro_rules! impl_pointcloud2_for_r2r {
     };
 }
 
+#[cfg(feature = "hiroz")]
+#[macro_export]
+macro_rules! impl_pointcloud2_for_hiroz {
+    () => {
+        pub mod impl_hiroz {
+            use ::zenoh_buffers::buffer::SplitBuffer;
+
+            pub fn to_pointcloud2_msg(
+                msg: ::hiroz_msgs::sensor_msgs::PointCloud2,
+            ) -> ::ros_pointcloud2::PointCloud2Msg {
+                ::ros_pointcloud2::PointCloud2Msg {
+                    header: ::ros_pointcloud2::ros::HeaderMsg {
+                        seq: 0, // removed in ROS2
+                        stamp: time_to_internal(msg.header.stamp),
+                        frame_id: msg.header.frame_id,
+                    },
+                    dimensions: ::ros_pointcloud2::CloudDimensions {
+                        width: msg.width,
+                        height: msg.height,
+                    },
+                    fields: msg
+                        .fields
+                        .into_iter()
+                        .map(|field| ::ros_pointcloud2::ros::PointFieldMsg {
+                            name: field.name.into(),
+                            offset: field.offset,
+                            datatype: field.datatype,
+                            count: field.count,
+                        })
+                        .collect(),
+                    endian: if msg.is_bigendian {
+                        ::ros_pointcloud2::Endian::Big
+                    } else {
+                        ::ros_pointcloud2::Endian::Little
+                    },
+                    point_step: msg.point_step,
+                    row_step: msg.row_step,
+                    data: msg.data.contiguous().as_ref().to_vec(),
+                    dense: if msg.is_dense {
+                        ::ros_pointcloud2::Denseness::Dense
+                    } else {
+                        ::ros_pointcloud2::Denseness::Sparse
+                    },
+                }
+            }
+
+            pub fn from_pointcloud2_msg(
+                msg: ::ros_pointcloud2::PointCloud2Msg,
+            ) -> ::hiroz_msgs::sensor_msgs::PointCloud2 {
+                ::hiroz_msgs::sensor_msgs::PointCloud2 {
+                    header: ::hiroz_msgs::std_msgs::Header {
+                        stamp: ::hiroz_msgs::builtin_interfaces::Time {
+                            sec: msg.header.stamp.sec,
+                            nanosec: msg.header.stamp.nanosec,
+                        },
+                        frame_id: msg.header.frame_id,
+                    },
+                    height: msg.dimensions.height,
+                    width: msg.dimensions.width,
+                    fields: msg
+                        .fields
+                        .into_iter()
+                        .map(|field| ::hiroz_msgs::sensor_msgs::PointField {
+                            name: field.name.into_owned(),
+                            offset: field.offset,
+                            datatype: field.datatype,
+                            count: field.count,
+                        })
+                        .collect(),
+                    is_bigendian: matches!(msg.endian, ::ros_pointcloud2::Endian::Big),
+                    point_step: msg.point_step,
+                    row_step: msg.row_step,
+                    data: msg.data.into(),
+                    is_dense: matches!(msg.dense, ::ros_pointcloud2::Denseness::Dense),
+                }
+            }
+
+            pub fn time_to_internal(
+                time: ::hiroz_msgs::builtin_interfaces::Time,
+            ) -> ::ros_pointcloud2::ros::TimeMsg {
+                ::ros_pointcloud2::ros::TimeMsg {
+                    sec: time.sec,
+                    nanosec: time.nanosec,
+                }
+            }
+
+            pub fn time_from_internal(
+                time: ::ros_pointcloud2::ros::TimeMsg,
+            ) -> ::hiroz_msgs::builtin_interfaces::Time {
+                ::hiroz_msgs::builtin_interfaces::Time {
+                    sec: time.sec,
+                    nanosec: time.nanosec,
+                }
+            }
+        }
+    };
+}
+
 #[cfg(feature = "ros2_interfaces_jazzy_serde")]
 #[macro_export]
 macro_rules! impl_pointcloud2_for_ros2_interfaces_jazzy_serde {

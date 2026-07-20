@@ -14,6 +14,8 @@ pub use rayon::prelude::*;
 #[cfg(feature = "derive")]
 pub use rpcl2_derive::*;
 
+#[cfg(feature = "hiroz")]
+pub use crate::impl_pointcloud2_for_hiroz;
 #[cfg(feature = "r2r")]
 pub use crate::impl_pointcloud2_for_r2r;
 #[cfg(feature = "rclrs")]

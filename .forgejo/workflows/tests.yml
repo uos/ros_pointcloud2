@@ -41,6 +41,15 @@ jobs:
           rustup target add thumbv7em-none-eabihf
           cargo build --target thumbv7em-none-eabihf --manifest-path ros_pointcloud2/ensure_no_std/Cargo.toml
 
+  hiroz:
+    needs:
+      - tests
+    runs-on: ubuntu-dev-noble-arm
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hiroz integration
+        run: cargo test -p ros_integration_tests --features hiroz --test hiroz -- --nocapture
+
   r2r_galactic:
     needs:
       - tests

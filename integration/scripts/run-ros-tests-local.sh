@@ -15,6 +15,7 @@ case "$ARG1" in
   r2r) FEATURES="r2r" ;;
   rosrust) FEATURES="rosrust" ;;
   rclrs) FEATURES="rclrs" ;;
+  hiroz) FEATURES="hiroz" ;;
   ros2-interfaces-jazzy-serde|ros2_jazzy_serde) FEATURES="ros2-interfaces-jazzy-serde" ;;
   ros2-interfaces-jazzy-rkyv|ros2_jazzy_rkyv) FEATURES="ros2-interfaces-jazzy-rkyv" ;;
   nalgebra) FEATURES="nalgebra" ;;
@@ -22,7 +23,7 @@ case "$ARG1" in
   *) FEATURES="" ;;
 esac
 
-echo "Make sure the ROS environment is sourced (e.g. 'source /opt/ros/$(printenv ROS_DISTRO || echo <distro>)/setup.bash')"
+echo "Make sure the ROS environment is sourced (e.g. 'source /opt/ros/$(printenv ROS_DISTRO || printf '%s' '<distro>')/setup.bash')"
 
 if [[ -n "$FEATURES" ]]; then
   echo "Running integration tests locally with features: $FEATURES"

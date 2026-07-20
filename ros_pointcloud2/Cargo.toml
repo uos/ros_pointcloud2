@@ -1,6 +1,6 @@
 [package]
 name = "ros_pointcloud2"
-version = "1.0.0-rc.3"
+version = "1.0.0-rc.4"
 edition = "2024"
 description = "Customizable conversions for working with sensor_msgs/PointCloud2."
 authors.workspace = true
@@ -58,6 +58,7 @@ roslibrust_ros2 = []
 rosrust = []
 r2r = []
 rclrs = []
+hiroz = []
 ros2_interfaces_jazzy_rkyv = []
 ros2_interfaces_jazzy_serde = []
 nalgebra = []

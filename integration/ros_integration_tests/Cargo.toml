@@ -10,7 +10,7 @@ keywords = ["ros", "pointcloud2", "integration", "tests"]
 categories = ["development-tools::testing"]
 
 [dependencies]
-ros_pointcloud2 = { path = "../../ros_pointcloud2", features = ["roslibrust_ros1", "roslibrust_ros2", "r2r", "rclrs", "rosrust", "nalgebra", "ros2_interfaces_jazzy_rkyv", "ros2_interfaces_jazzy_serde"] }
+ros_pointcloud2 = { path = "../../ros_pointcloud2", features = ["roslibrust_ros1", "roslibrust_ros2", "r2r", "rclrs", "hiroz", "rosrust", "nalgebra", "ros2_interfaces_jazzy_rkyv", "ros2_interfaces_jazzy_serde"] }
 ros2-interfaces-jazzy-serde = { version = "0.0.4", features = [
   "sensor_msgs",
 ], optional = true }
@@ -19,6 +19,11 @@ ros2-interfaces-jazzy-rkyv = { version = "0.0.5", features = [
 ], optional = true }
 r2r = { version = "0.9", optional = true }
 rclrs = { version = "0.7", optional = true }
+hiroz-msgs = { package = "hiroz-msgs", version = "0.1.0", git = "https://github.com/ZettaScaleLabs/hiroz.git", default-features = false, features = [
+  "sensor_msgs",
+  "jazzy",
+], optional = true }
+zenoh-buffers = { version = "1.9", optional = true }
 rosrust = { version = "0.9.12", optional = true }
 rosrust_msg = { version = "0.1.8", optional = true }
 nalgebra = { version = "0.34", optional = true }
@@ -29,6 +34,7 @@ ros2-interfaces-jazzy-rkyv = ["dep:ros2-interfaces-jazzy-rkyv"]
 r2r = ["dep:r2r"]
 rosrust = ["dep:rosrust", "dep:rosrust_msg"]
 rclrs = ["dep:rclrs"]
+hiroz = ["dep:hiroz-msgs", "dep:zenoh-buffers"]
 nalgebra = ["dep:nalgebra"]
 
 default = []

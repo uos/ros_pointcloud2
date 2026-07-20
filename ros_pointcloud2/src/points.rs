@@ -148,10 +148,10 @@ mod rkyv_impls {
     // Manual rkyv support for `RGB`. Provide Archive/Serialize/Deserialize
     // implementations that delegate to the packed `f32` representation.
     use super::RGB;
-    use rkyv::rancor::Fallible;
     use rkyv::Archive;
     use rkyv::Place;
     use rkyv::Serialize;
+    use rkyv::rancor::Fallible;
 
     impl Archive for RGB {
         type Archived = <f32 as Archive>::Archived;
@@ -178,9 +178,9 @@ mod rkyv_impls {
 pub mod with_rgb {
 
     use super::RGB;
+    use rkyv::Archive;
     use rkyv::rancor::Fallible;
     use rkyv::with::{ArchiveWith, DeserializeWith, SerializeWith};
-    use rkyv::Archive;
 
     pub struct AsF32;
 

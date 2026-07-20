@@ -40,7 +40,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! ros_pointcloud2 = { version = "1.0.0-rc.3", features = ["r2r", "rosrust", "nalgebra"] }
+//! ros_pointcloud2 = { version = "1.0.0-rc.4", features = ["r2r", "rosrust", "nalgebra"] }
 //!
 //! r2r = "*"
 //! # ... or maybe for ROS1:
@@ -53,6 +53,7 @@
 //! | Library | Macro | ROS Version | Feature |
 //! | :--- | :--- | :--- | :--- |
 //! | [rclrs](https://docs.rs/rclrs/latest/rclrs/) | [`impl_pointcloud2_for_rclrs!`] | ROS 2 | `"rclrs"` |
+//! | [Hiroz](https://zettascalelabs.github.io/hiroz/) | [`impl_pointcloud2_for_hiroz!`] | ROS 2 | `"hiroz"` |
 //! | [r2r](https://docs.rs/r2r/latest/r2r/) | [`impl_pointcloud2_for_r2r!`] | ROS 2 | `"r2r"` |
 //! | [ros2-client](https://docs.rs/ros2-client/latest/ros2_client/) | [`impl_pointcloud2_for_ros2_interfaces_jazzy_serde!`] | ROS 2 | `"ros2_interfaces_jazzy_serde"` |
 //! | [rosrust](https://docs.rs/rosrust/latest/rosrust/) | [`impl_pointcloud2_for_rosrust!`] | ROS 1 | `"rosrust"` |
@@ -62,6 +63,9 @@
 //! The roslibrust macros need to be invoked with the crate root where the messages are included via `include!`.
 //!
 //! For example: `impl_pointcloud2_for_roslibrust_ros2!(crate);`
+//!
+//! The Hiroz macro expects your crate to depend on `hiroz-msgs`, currently from the Hiroz git repository unless Hiroz publishes the crate.
+//! Because Hiroz stores byte arrays as `ZBuf`, consumers also need `zenoh-buffers` for incoming `PointCloud2` data conversion.
 //!
 //! Also, indicate the following dependencies to your linker inside the `package.xml` of your package if your crate of choice uses the xml to link messages.
 //!
@@ -128,6 +132,7 @@
 //! - rayon — Parallel iterator support for `*_par_iter` functions.
 //! - r2r — Include macros for the [r2r](https://docs.rs/r2r/latest/r2r/) ROS 2 client crate.
 //! - rclrs — Include macros for the [rclrs](https://docs.rs/rclrs/latest/rclrs/) ROS 2 client crate.
+//! - hiroz — Include macros for the [Hiroz](https://zettascalelabs.github.io/hiroz/) ROS 2 stack.
 //! - roslibrust_ros1 — Include macros for the [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) client crate with ROS 1 messages.
 //! - roslibrust_ros2 — Include macros for the [roslibrust](https://docs.rs/roslibrust/latest/roslibrust/) client crate with ROS 2 messages.
 //! - rosrust — Include macros for the [rosrust](https://docs.rs/rosrust/latest/rosrust/) ROS 1 client crate.
