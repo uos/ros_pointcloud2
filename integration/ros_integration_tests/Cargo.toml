@@ -12,13 +12,13 @@ categories = ["development-tools::testing"]
 
 [dependencies]
 ros_pointcloud2 = { path = "../../ros_pointcloud2", features = ["roslibrust_ros1", "roslibrust_ros2", "r2r", "rclrs", "hiroz", "rosrust", "nalgebra", "ros2_interfaces_jazzy_rkyv", "ros2_interfaces_jazzy_serde"] }
-ros2-interfaces-jazzy-serde = { version = "0.0.4", features = [
+ros2-interfaces-jazzy-serde = { version = "0.0.5", features = [
   "sensor_msgs",
 ], optional = true }
 ros2-interfaces-jazzy-rkyv = { version = "0.0.5", features = [
   "sensor_msgs",
 ], optional = true }
-r2r = { version = "0.9", optional = true }
+r2r = { version = "0.9.7", optional = true }
 rclrs = { version = "0.7", optional = true }
 hiroz-msgs = { package = "hiroz-msgs", version = "0.2.0", git = "https://github.com/ZettaScaleLabs/hiroz.git", tag = "v0.2.0", default-features = false, features = [
   "sensor_msgs",

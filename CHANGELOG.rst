@@ -12,6 +12,7 @@ v1.0.0
 - Adds ``try_into_slice_strict`` that hard fails on unsupported layouts.
 - Adds ``try_from_slice``, which creates a message from a slice with minimal copy.
 - Adds full support for ``rclrs``.
+- Adds ``r2r`` support for ROS 2 Lyrical (requires ``r2r`` 0.9.7 or newer).
 - Adds full support for ``roslibrust`` for ROS1 and ROS2.
 - Renamed the ``rename`` attribute to ``remap`` for custom field names.
 - Renamed the ``MsgConversionError`` enum to ``ConversionError``.
