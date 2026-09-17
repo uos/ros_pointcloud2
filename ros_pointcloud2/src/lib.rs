@@ -40,7 +40,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! ros_pointcloud2 = { version = "1.0.0-rc.4", features = ["r2r", "rosrust", "nalgebra"] }
+//! ros_pointcloud2 = { version = "1.0.0-rc.5", features = ["r2r", "rosrust", "nalgebra"] }
 //!
 //! r2r = "*"
 //! # ... or maybe for ROS1:
