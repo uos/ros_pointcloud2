@@ -263,6 +263,12 @@ pub enum ConversionError {
         expected_point_step: usize,
     },
     UnsupportedSliceView,
+    /// The derived layout does not add up to the size of the point type.
+    /// The usual cause is a missing `#[repr(C)]` at compile time.
+    LayoutSizeMismatch {
+        layout_size: usize,
+        type_size: usize,
+    },
 }
 
 impl From<core::num::TryFromIntError> for ConversionError {
@@ -309,6 +315,18 @@ impl core::fmt::Display for ConversionError {
                     f,
                     "Stored datatype {:?} is not compatible with requested datatype {:?}.",
                     stored, requested
+                )
+            }
+            ConversionError::LayoutSizeMismatch {
+                layout_size,
+                type_size,
+            } => {
+                write!(
+                    f,
+                    "The point layout describes {layout_size} bytes but the point type is \
+                     {type_size} bytes, so its field offsets do not describe the type. A derived \
+                     PointConvertible needs #[repr(C)]. A hand-written one must account for every \
+                     byte of the struct, padding included."
                 )
             }
             ConversionError::ExhaustedSource => {
@@ -933,6 +951,17 @@ impl PointCloud2Msg {
                     offset += size as usize;
                 }
             }
+        }
+
+        // The walk above turns the layout into byte offsets, so if the layout
+        // does not account for exactly the bytes of `C` then those offsets do
+        // not describe `C` and every field would be written to the wrong place.
+        let type_size = core::mem::size_of::<C>();
+        if offset != type_size {
+            return Err(ConversionError::LayoutSizeMismatch {
+                layout_size: offset,
+                type_size,
+            });
         }
 
         Ok((

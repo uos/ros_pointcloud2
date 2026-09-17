@@ -8,6 +8,46 @@ use proc_macro2::{Ident, Literal};
 use quote::{quote, ToTokens};
 use syn::{parenthesized, parse_macro_input, Data, DeriveInput, Fields, LitStr};
 
+/// Emit a const assertion that the fields sit in memory in the order they are
+/// declared, without overlapping.
+fn assert_declaration_order_is_memory_order(
+    struct_name: &Ident,
+    data: &Data,
+) -> proc_macro2::TokenStream {
+    let Data::Struct(data) = data else {
+        return quote! {};
+    };
+    let Fields::Named(fields) = &data.fields else {
+        return quote! {};
+    };
+
+    let checks = fields.named.iter().map(|field| {
+        let field_name = field.ident.as_ref().unwrap();
+        let field_ty = &field.ty;
+        let message = format!(
+            "`{struct_name}` cannot derive PointConvertible: field `{field_name}` is not stored \
+             in declaration order.\n\nThe derived layout maps this struct onto a PointCloud2 \
+             byte buffer by declaration order, so the compiler must not reorder the fields. It \
+             does reorder them when the struct mixes field widths and is not `#[repr(C)]`: an \
+             f64 declared last is moved to offset 0, and every value read back for it is zero.\n\n\
+             Add `#[repr(C)]` above the struct."
+        );
+        quote! {
+            let offset = ::core::mem::offset_of!(#struct_name, #field_name);
+            assert!(offset >= previous_field_end, #message);
+            previous_field_end = offset + ::core::mem::size_of::<#field_ty>();
+        }
+    });
+
+    quote! {
+        const _: () = {
+            let mut previous_field_end = 0usize;
+            #(#checks)*
+            let _ = previous_field_end;
+        };
+    }
+}
+
 fn get_allowed_types() -> HashMap<&'static str, usize> {
     let mut allowed_datatypes = HashMap::<&'static str, usize>::new();
     allowed_datatypes.insert("f32", std::mem::size_of::<f32>());
@@ -107,8 +147,11 @@ pub fn ros_point_derive(input: TokenStream) -> TokenStream {
     let remap_arr = struct_field_remap_array(&input);
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
     let layout = layout_of_type(&name, &input.data);
+    let order_check = assert_declaration_order_is_memory_order(&name, &input.data);
 
     let expanded = quote! {
+        #order_check
+
         unsafe impl #impl_generics ::ros_pointcloud2::PointConvertible<#field_len_token> for #name #ty_generics #where_clause {
             fn layout() -> ::ros_pointcloud2::LayoutDescription {
                 let mut last_field_end = 0;

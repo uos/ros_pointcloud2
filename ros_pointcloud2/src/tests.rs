@@ -675,14 +675,14 @@ mod test {
 
         let pts = vec![SmallLayoutPoint2 { x: 1.0, _pad: 0 }];
         match PointCloud2Msg::try_from_vec_strict(pts) {
-            Err(ConversionError::VecElementSizeMismatch {
-                element_size,
-                expected_point_step,
+            Err(ConversionError::LayoutSizeMismatch {
+                layout_size,
+                type_size,
             }) => {
-                assert_eq!(element_size, core::mem::size_of::<SmallLayoutPoint2>());
-                assert_eq!(expected_point_step, 4usize);
+                assert_eq!(layout_size, 4usize);
+                assert_eq!(type_size, core::mem::size_of::<SmallLayoutPoint2>());
             }
-            Err(e) => panic!("expected VecElementSizeMismatch, got {:?}", e),
+            Err(e) => panic!("expected LayoutSizeMismatch, got {:?}", e),
             Ok(_) => panic!("expected error, got Ok"),
         }
     }
