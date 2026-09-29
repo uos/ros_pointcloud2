@@ -68,7 +68,7 @@ See the documentation for the respective macros for details on how to use them.
 
 Note that the macros for `roslibrust` need the root path where messages are included via `include!` as a parameter.
 
-The Hiroz macro expects consumers to enable the `ros_pointcloud2` feature `"hiroz"` and add `hiroz-msgs` themselves, currently from the Hiroz git repository unless Hiroz publishes the crate. Because Hiroz stores byte arrays as `ZBuf`, consumers also need `zenoh-buffers` for incoming `PointCloud2` data conversion.
+The Hiroz macro expects consumers to enable the `ros_pointcloud2` feature `"hiroz"` and add `hiroz-msgs` from crates.io themselves. Because Hiroz stores byte arrays as `ZBuf`, consumers also need `zenoh-buffers` for incoming `PointCloud2` data conversion.
 
 The macros are tested on various distros with CI. Since the message definition itself is static for a long time now, this crate should work on all ROS distros for as long as the respective ROS library or framework does not change its message generation pipeline.
 
